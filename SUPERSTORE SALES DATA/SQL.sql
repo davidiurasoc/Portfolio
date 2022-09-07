@@ -8,6 +8,8 @@
 -- 1.5 - Most profitable State
 -- 1.6 - Most profitable City
 -- 1.7 - Most profitable Client
+-- 1.8 - TOP 10 State profitability
+-- 1.9 - TOP 10 City profitability
 
 -- 2. ---------- Sales ----------
 
@@ -47,6 +49,12 @@
 -- 5.5 - Most ppu State
 -- 5.6 - Most ppu City
 -- 5.7 - Most ppu Client
+-- 5.8 - MIN ppu per City
+-- 5.9 - MAX ppu per City
+
+-- 6. ---------- New York City vs Los Ageles ---------
+
+-- 6.1 - New York City vs Los Ageles
 
 
 
@@ -161,6 +169,20 @@ SELECT Segment, SUM(Profit) as Profit
 FROM Orders
 GROUP BY Segment
 ORDER BY 2 DESC
+
+-- 1.8
+
+SELECT TOP 10 State, SUM(Profit) as Profit 
+FROM Orders
+GROUP BY  State
+ORDER BY Profit DESC
+
+-- 1.9 
+
+SELECT TOP 10 City, SUM(Profit) as Profit 
+FROM Orders
+GROUP BY  City
+ORDER BY Profit DESC
 
 
 
@@ -417,6 +439,36 @@ FROM ProfitPerUnit
 GROUP BY Client
 ORDER BY [Profit per Unit] DESC
 
+-- 5.8
+
+SELECT City , MIN([Profit per Unit]) as [Minimum PPU]
+FROM ProfitPerUnit
+GROUP BY City
+ORDER BY 2 DESC
+
+-- 5.9
+
+SELECT City , MAX([Profit per Unit]) as [Maximum PPU]
+FROM ProfitPerUnit
+GROUP BY City
+ORDER BY 2 DESC
+
+
+----- 6. -----
+
+
+-- 6.1
+
+SELECT City, AVG([Shipping duration (days)]) as [Avg. Shipping duration (days)], 
+	SUM(Quantity) as Quantity, 
+	SUM(Sales) as Sales, 
+	SUM(Profit) as Profit, 
+	AVG([Profit per Unit]) as [Avg. Profit per unit]
+FROM ProfitPerUnit
+WHERE City LIKE '%Los Angeles%'
+OR City LIKE '%New York City%'
+GROUP BY City
+ORDER BY Profit DESC
 
 
 
